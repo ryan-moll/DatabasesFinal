@@ -78,7 +78,7 @@ while($row = mysqli_fetch_array($winsOne, MYSQLI_BOTH))
   }
 while($row = mysqli_fetch_array($resultTwo, MYSQLI_BOTH))
   {
-    print "Team 2:\n";
+    print "\nTeam 2:\n";
     print "$row[Team]  $row[Record]";
   }
 while($row = mysqli_fetch_array($winsTwo, MYSQLI_BOTH))
