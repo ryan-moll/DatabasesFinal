@@ -91,7 +91,10 @@ while($row = mysqli_fetch_array($winsTwo, MYSQLI_BOTH))
 print "</pre>";
 print "\nThe $betterTeam are the better team.\n";
 
-mysqli_free_result($result);
+mysqli_free_result($resultOne);
+mysqli_free_result($winsOne);
+mysqli_free_result($resultTwo);
+mysqli_free_result($winsTwo);
 
 mysqli_close($conn);
 

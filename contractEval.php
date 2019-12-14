@@ -28,7 +28,6 @@ $playerQuery = "SELECT CONCAT(fname, ' ', lname) AS 'Name', salary1819 AS 'Salar
 $playerQuery = $playerQuery.$player."';";
 $betterThanQuery = "SELECT CONCAT(fname, ' ', lname) AS 'Name', salary1819 AS 'Salary', (ppg+rebounds+blocks+assists+steals-fouls-turnovers) AS 'Value' FROM player JOIN playerStat USING(playerID) JOIN playerSalary USING(playerID) WHERE (ppg+rebounds+blocks+assists+steals-fouls-turnovers) > (SELECT (ppg+rebounds+blocks+assists+steals-fouls-turnovers) AS 'main' FROM player JOIN playerStat USING(playerID) JOIN playerSalary USING(playerID) WHERE CONCAT(fname, ' ', lname) LIKE '";
 $betterThanQuery = $betterThanQuery.$player."') ORDER BY (ppg+rebounds+blocks+assists+steals-fouls-turnovers) ASC LIMIT 5;";
-
 $worseThanQuery = "SELECT CONCAT(fname, ' ', lname) AS 'Name', salary1819 AS 'Salary', (ppg+rebounds+blocks+assists+steals-fouls-turnovers) AS 'Value' FROM player JOIN playerStat USING(playerID) JOIN playerSalary USING(playerID) WHERE (ppg+rebounds+blocks+assists+steals-fouls-turnovers) < (SELECT (ppg+rebounds+blocks+assists+steals-fouls-turnovers) AS 'main' FROM player JOIN playerStat USING(playerID) JOIN playerSalary USING(playerID) WHERE CONCAT(fname, ' ', lname) LIKE '";
 $worseThanQuery = $worseThanQuery.$player."') ORDER BY (ppg+rebounds+blocks+assists+steals-fouls-turnovers) DESC LIMIT 5;";
 
@@ -40,8 +39,11 @@ The queries:
 <p>
 <?php
 print $playerQuery;
+print "</br>";
 print $betterThanQuery;
+print "</br>";
 print $worseThanQuery;
+print "</br>";
 ?>
 
 <hr>
@@ -59,6 +61,7 @@ or die(mysqli_error($conn));
 
 print "<pre>";
 print "\nPlayers better than $player :\n";
+print "_NAME_ _SALARY_ _VALUE_";
 $totalSal = 0;
 $playerSal = 0;
 while($row = mysqli_fetch_array($betterResult, MYSQLI_BOTH))
@@ -67,14 +70,16 @@ while($row = mysqli_fetch_array($betterResult, MYSQLI_BOTH))
     print "$row[Name]  $row[Salary] $row[Value]";
     $totalSal = $totalSal + $row[Salary];
   }
-print "\nPlayers worse than $player :\n";
+print "\n\nPlayers worse than $player :\n";
+print "_NAME_ _SALARY_ _VALUE_";
 while($row = mysqli_fetch_array($worseResult, MYSQLI_BOTH))
   {
     print "\n";
     print "$row[Name]  $row[Salary] $row[Value]";
     $totalSal = $totalSal + $row[Salary];
   }
-print "\n$player :\n";
+print "\n\n$player :\n";
+print "_NAME_ _SALARY_ _VALUE_";
 while($row = mysqli_fetch_array($playerResult, MYSQLI_BOTH))
   {
     print "\n";
@@ -82,7 +87,7 @@ while($row = mysqli_fetch_array($playerResult, MYSQLI_BOTH))
     $playerSal = $row[Salary];
   }
 $avgSal = $totalSal/10;
-print "\nAverage salary for players like $player : $avgSal \n";
+print "\n\nAverage salary for players like $player : $avgSal \n";
 if($playerSal > $avgSal){
     print "$player is being overpaid.";
 }else{

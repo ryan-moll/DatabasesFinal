@@ -26,9 +26,9 @@ $playerTwo = $_POST['playerTwo'];
 $playerOne = mysqli_real_escape_string($conn, $playerOne);
 $playerTwo = mysqli_real_escape_string($conn, $playerTwo);
 
-$queryOne = "SELECT CONCAT(fname, " ", lname) AS 'name', (ppg+rebounds+blocks+assists+steals-fouls-turnovers) AS 'value' FROM player JOIN playerStat USING(playerID) WHERE CONCAT(fname, " ", lname) LIKE '";
+$queryOne = "SELECT CONCAT(fname, ' ', lname) AS 'name', (ppg+rebounds+blocks+assists+steals-fouls-turnovers) AS 'value' FROM player JOIN playerStat USING(playerID) WHERE CONCAT(fname, ' ', lname) LIKE '";
 $queryOne = $queryOne.$playerOne."';";
-$queryTwo = "SELECT CONCAT(fname, " ", lname) AS 'name', (ppg+rebounds+blocks+assists+steals-fouls-turnovers) AS 'value' FROM player JOIN playerStat USING(playerID) WHERE CONCAT(fname, " ", lname) LIKE '";
+$queryTwo = "SELECT CONCAT(fname, ' ', lname) AS 'name', (ppg+rebounds+blocks+assists+steals-fouls-turnovers) AS 'value' FROM player JOIN playerStat USING(playerID) WHERE CONCAT(fname, ' ', lname) LIKE '";
 $queryTwo = $queryTwo.$playerTwo."';";
 
 ?>
@@ -66,23 +66,23 @@ while($row = mysqli_fetch_array($resultOne, MYSQLI_BOTH))
         $best = $row[value];
         $betterPlayer = $row[name];
     }
-  }
+}
 while($row = mysqli_fetch_array($resultTwo, MYSQLI_BOTH))
   {
-    print "Player 2:\n";
-    print "$row[name]  $row[value]";
+    print "\nPlayer 2:\n";
+    print "$row[name]  $row[value]\n";
     if($row[value] > $best){
-        $best = $row[value];
-        $betterPlayer = $row[name];
+      $best = $row[value];
+      $betterPlayer = $row[name];
     }
   }
 print "</pre>";
-print "\nThe better player is: $betterPlayer\n";
+print "\nThe better player is: \n$betterPlayer\n";
 
-mysqli_free_result($result);
+mysqli_free_result($resultOne);
+mysqli_free_result($resultTwo);
 
 mysqli_close($conn);
-
 ?>
 
 <p>
