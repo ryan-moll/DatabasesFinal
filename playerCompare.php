@@ -1,6 +1,6 @@
 <?php
 
-include('connectionData.txt');
+include('nbaConData.txt');
 
 $conn = mysqli_connect($server, $user, $pass, $dbname, $port)
 or die('Error connecting to MySQL server.');
@@ -77,7 +77,7 @@ while($row = mysqli_fetch_array($resultTwo, MYSQLI_BOTH))
     }
   }
 print "</pre>";
-print "\nThe better player is: $betterPlayer\n"
+print "\nThe better player is: $betterPlayer\n";
 
 mysqli_free_result($result);
 
