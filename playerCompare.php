@@ -20,43 +20,64 @@ or die('Error connecting to MySQL server.');
   
 <?php
   
-$category = $_POST['Category'];
+$playerOne = $_POST['playerOne'];
+$playerTwo = $_POST['playerTwo'];
 
-$category = mysqli_real_escape_string($conn, $category);
-// this is a small attempt to avoid SQL injection
-// better to use prepared statements
+$playerOne = mysqli_real_escape_string($conn, $playerOne);
+$playerTwo = mysqli_real_escape_string($conn, $playerTwo);
 
-$query = "SELECT fName, lName, ";
-$query = $query.$category
-$query = $query." FROM playerStat ps JOIN player p USING(playerID) ORDER BY ";
-$query = $query.$category." DESC LIMIT 10;";
+$queryOne = "SELECT CONCAT(fname, " ", lname) AS 'name', (ppg+rebounds+blocks+assists+steals-fouls-turnovers) AS 'value' FROM player JOIN playerStat USING(playerID) WHERE CONCAT(fname, " ", lname) LIKE '";
+$queryOne = $queryOne.$playerOne."';";
+$queryTwo = "SELECT CONCAT(fname, " ", lname) AS 'name', (ppg+rebounds+blocks+assists+steals-fouls-turnovers) AS 'value' FROM player JOIN playerStat USING(playerID) WHERE CONCAT(fname, " ", lname) LIKE '";
+$queryTwo = $queryTwo.$playerTwo."';";
 
 ?>
 
 
 <p>
-The query:
+The queries:
 <p>
 <?php
-print $query;
+print $queryOne;
+?>
+<p>
+<?php
+print $queryTwo;
 ?>
 
 <hr>
 <p>
-Result of query:
+Result of queries:
 <p>
 
 <?php
-$result = mysqli_query($conn, $query)
+$resultOne = mysqli_query($conn, $queryOne)
 or die(mysqli_error($conn));
-
+$resultTwo = mysqli_query($conn, $queryTwo)
+or die(mysqli_error($conn));
+$best = 0;
+$betterPlayer = "";
 print "<pre>";
-while($row = mysqli_fetch_array($result, MYSQLI_BOTH))
+while($row = mysqli_fetch_array($resultOne, MYSQLI_BOTH))
   {
-    print "\n";
-    print "$row[fName]  $row[lName] $row[ppg]";
+    print "Player 1:\n";
+    print "$row[name]  $row[value]";
+    if($row[value] > $best){
+        $best = $row[value];
+        $betterPlayer = $row[name];
+    }
+  }
+while($row = mysqli_fetch_array($resultTwo, MYSQLI_BOTH))
+  {
+    print "Player 2:\n";
+    print "$row[name]  $row[value]";
+    if($row[value] > $best){
+        $best = $row[value];
+        $betterPlayer = $row[name];
+    }
   }
 print "</pre>";
+print "\nThe better player is: $betterPlayer\n"
 
 mysqli_free_result($result);
 
