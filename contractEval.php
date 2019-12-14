@@ -1,6 +1,6 @@
 <?php
 
-include('connectionData.txt');
+include('nbaConData.txt');
 
 $conn = mysqli_connect($server, $user, $pass, $dbname, $port)
 or die('Error connecting to MySQL server.');
@@ -20,45 +20,79 @@ or die('Error connecting to MySQL server.');
   
 <?php
   
-$category = $_POST['category'];
+$player = $_POST['playerName'];
 
-$category = mysqli_real_escape_string($conn, $category);
-// this is a small attempt to avoid SQL injection
-// better to use prepared statements
+$player = mysqli_real_escape_string($conn, $player);
 
-$query = "SELECT fName, lName, ";
-$query = $query.$category;
-$query = $query." as 'stat' FROM playerStat ps JOIN player p USING(playerID) ORDER BY ";
-$query = $query.$category." DESC LIMIT 10;";
+$playerQuery = "SELECT CONCAT(fname, ' ', lname) AS 'Name', salary1819 AS 'Salary', (ppg+rebounds+blocks+assists+steals-fouls-turnovers) AS 'Value' FROM player JOIN playerStat USING(playerID) JOIN playerSalary USING(playerID) WHERE CONCAT(fname, ' ', lname) LIKE '";
+$playerQuery = $playerQuery.$player."';";
+$betterThanQuery = "SELECT CONCAT(fname, ' ', lname) AS 'Name', salary1819 AS 'Salary', (ppg+rebounds+blocks+assists+steals-fouls-turnovers) AS 'Value' FROM player JOIN playerStat USING(playerID) JOIN playerSalary USING(playerID) WHERE (ppg+rebounds+blocks+assists+steals-fouls-turnovers) > (SELECT (ppg+rebounds+blocks+assists+steals-fouls-turnovers) AS 'main' FROM player JOIN playerStat USING(playerID) JOIN playerSalary USING(playerID) WHERE CONCAT(fname, ' ', lname) LIKE '";
+$betterThanQuery = $betterThanQuery.$player."') ORDER BY (ppg+rebounds+blocks+assists+steals-fouls-turnovers) ASC LIMIT 5;";
+
+$worseThanQuery = "SELECT CONCAT(fname, ' ', lname) AS 'Name', salary1819 AS 'Salary', (ppg+rebounds+blocks+assists+steals-fouls-turnovers) AS 'Value' FROM player JOIN playerStat USING(playerID) JOIN playerSalary USING(playerID) WHERE (ppg+rebounds+blocks+assists+steals-fouls-turnovers) < (SELECT (ppg+rebounds+blocks+assists+steals-fouls-turnovers) AS 'main' FROM player JOIN playerStat USING(playerID) JOIN playerSalary USING(playerID) WHERE CONCAT(fname, ' ', lname) LIKE '";
+$worseThanQuery = $worseThanQuery.$player."') ORDER BY (ppg+rebounds+blocks+assists+steals-fouls-turnovers) DESC LIMIT 5;";
 
 ?>
 
 
 <p>
-The query:
+The queries:
 <p>
 <?php
-print $query;
+print $playerQuery;
+print $betterThanQuery;
+print $worseThanQuery;
 ?>
 
 <hr>
 <p>
-Result of query:
+Result of queries:
 <p>
 
 <?php
-$result = mysqli_query($conn, $query)
+$playerResult = mysqli_query($conn, $playerQuery)
+or die(mysqli_error($conn));
+$betterResult = mysqli_query($conn, $betterThanQuery)
+or die(mysqli_error($conn));
+$worseResult = mysqli_query($conn, $worseThanQuery)
 or die(mysqli_error($conn));
 
 print "<pre>";
-while($row = mysqli_fetch_array($result, MYSQLI_BOTH))
+print "\nPlayers better than $player :\n";
+$totalSal = 0;
+$playerSal = 0;
+while($row = mysqli_fetch_array($betterResult, MYSQLI_BOTH))
   {
     print "\n";
-    print "$row[fName]  $row[lName] $row[stat]";
+    print "$row[Name]  $row[Salary] $row[Value]";
+    $totalSal = $totalSal + $row[Salary];
   }
+print "\nPlayers worse than $player :\n";
+while($row = mysqli_fetch_array($worseResult, MYSQLI_BOTH))
+  {
+    print "\n";
+    print "$row[Name]  $row[Salary] $row[Value]";
+    $totalSal = $totalSal + $row[Salary];
+  }
+print "\n$player :\n";
+while($row = mysqli_fetch_array($playerResult, MYSQLI_BOTH))
+  {
+    print "\n";
+    print "$row[Name]  $row[Salary] $row[Value]";
+    $playerSal = $row[Salary];
+  }
+$avgSal = $totalSal/10;
+print "\nAverage salary for players like $player : $avgSal \n";
+if($playerSal > $avgSal){
+    print "$player is being overpaid.";
+}else{
+    print "$player is being underpaid.";
+}
 print "</pre>";
 
-mysqli_free_result($result);
+mysqli_free_result($playerResult);
+mysqli_free_result($betterResult);
+mysqli_free_result($worseResult);
 
 mysqli_close($conn);
 
