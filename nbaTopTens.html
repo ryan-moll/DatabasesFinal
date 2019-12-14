@@ -1,0 +1,53 @@
+<html>
+<head>
+       <title>NBA Data!</title>
+       <link rel="stylesheet" href="nba.css">
+</head>
+
+<body bgcolor="white">
+
+<div class="header">
+  <a href="nbaIndex.html">
+    <img src="logo.png" alt="NBA logo" />
+    <h1>NBA Data</h1>
+  </a>
+</div>
+
+<!--Nav bar code from W3Schools: https://www.w3schools.com/howto/howto_js_topnav.asp-->
+<div class="topnav">
+  <a href="nbaIndex.html">Home</a>
+  <a class="active" href="nbaTopTens.html">Top Tens</a>
+  <a href="nbaPlayerComp.html">Compare Players</a>
+  <a href="nbaTeamCompare.html">Compare Teams</a>
+  <a href="nbaCoachPerformance.html">Coach Performance</a>
+  <a href="nbaContractEval.html">Player Contract Evaluation</a>
+</div>
+
+<hr>
+<p>
+Please select a category:
+</br>
+<p>
+
+<form action="topTen.php" method="POST">
+    <input type="radio" name="category" value="3p%" checked> Player: 3-Point %<br>
+    <input type="radio" name="category" value="fg%"> Player: Field Goal %<br>
+    <input type="radio" name="category" value="ppg"> Player: Points Per Game<br>
+    <input type="radio" name="category" value="rebounds"> Player: Rebounds Per Game<br>
+    <input type="radio" name="category" value="blocks"> Player: Blocks Per Game<br>
+    <input type="radio" name="category" value="minutes"> Player: Minutes Played Per Game<br>
+    <input type="radio" name="category" value="assists"> Player: Assists Per Game<br>
+    <input type="radio" name="category" value="steals"> Player: Steals Per Game<br>
+    <input type="radio" name="category" value="turnovers"> Player: Turnovers Per Game<br>
+    <input type="radio" name="category" value="fouls"> Player: Fouls Per Game<br>
+    </br>
+    <input type="submit" value="submit">
+</form>
+
+
+
+<hr>
+
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+<html>
+<head>
+       <title>NBA Data!</title>
+       <link rel="stylesheet" href="nba.css">
+</head>
+
+<body bgcolor="white">
+
+<div class="header">
+  <a href="nbaIndex.html">
+    <img src="logo.png" alt="NBA logo" />
+    <h1>NBA Data</h1>
+  </a>
+</div>
+
+<!--Nav bar code from W3Schools: https://www.w3schools.com/howto/howto_js_topnav.asp-->
+<div class="topnav">
+  <a href="nbaIndex.html">Home</a>
+  <a href="nbaTopTens.html">Top Tens</a>
+  <a href="nbaPlayerComp.html">Compare Players</a>
+  <a href="nbaTeamCompare.html">Compare Teams</a>
+  <a class="active" href="nbaCoachPerformance.html">Coach Performance</a>
+  <a href="nbaContractEval.html">Player Contract Evaluation</a>
+</div>
+
+<hr>
+<p>
+Please enter a team:
+</br>
+<p>
+
+<form action="coachPerformance.php" method="POST">
+    Team name: <input type="text" name="coachName" placeholder="Jazz"><br> 
+    </br>
+    <input type="submit" value="submit">
+    <input type="reset" value="erase">
+</form>
+
+<hr>
+
+</body>
+</html>
